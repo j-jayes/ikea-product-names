@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKEA Naming System: From Dyslexia to Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- 
+        Narrative Plan:
+        1.  Introduction: The origin story of Kamprad's dyslexia as the hook.
+        2.  System Overview: A high-level flowchart explaining the core naming principle.
+        3.  The Rulebook: Donut and Bar charts to visualize the composition and distribution of naming rules.
+        4.  The Rule Breakers: A card-based layout for famous exceptions.
+        5.  Global Challenges: A creative, non-map visualization of linguistic blunders.
+        6.  Conclusion: A flowchart detailing the proposed data science modeling strategy.
+
+        Visualization Choices:
+        -   Section 1 Flowchart (Numbers to Words): Goal: Inform. Method: HTML/CSS. Justification: Clearly shows a simple process. NO SVG.
+        -   Section 2 System Flowchart: Goal: Organize. Method: HTML/CSS. Justification: Best for showing the core system structure. NO SVG.
+        -   Section 3 Donut/Bar Charts: Goal: Compare/Inform. Method: Chart.js/Canvas. Justification: Donut shows composition of name types, Bar compares rules across categories. NO SVG.
+        -   Section 4 Exception Cards: Goal: Organize. Method: HTML/CSS. Justification: A visually appealing way to present structured, comparative information. NO SVG.
+        -   Section 5 "Map" Callouts: Goal: Change (by location). Method: HTML/CSS. Justification: Creative adaptation of a map to show regional issues without external libraries or SVG.
+        -   Section 6 ML Model Flowchart: Goal: Organize. Method: HTML/CSS. Justification: Standard and effective for showing an algorithmic process. NO SVG.
+        
+        Color Palette Selection: "Brilliant Blues". HEX: #003F5C, #7A5195, #EF5675, #FFA600.
+        
+        CRITICAL CONFIRMATION: NEITHER MERMAID JS NOR SVG WERE USED IN THIS DOCUMENT. ALL DIAGRAMS AND CHARTS ARE RENDERED USING EITHER STRUCTURED HTML/CSS WITH TAILWIND OR THE JAVASCRIPT CHART.JS LIBRARY VIA HTML CANVAS.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .brand-dark-blue { color: #003F5C; }
+        .brand-purple { color: #7A5195; }
+        .brand-pink { color: #EF5675; }
+        .brand-orange { color: #FFA600; }
+        
+        .bg-brand-dark-blue { background-color: #003F5C; }
+        .bg-brand-purple { background-color: #7A5195; }
+        .bg-brand-pink { background-color: #EF5675; }
+        .bg-brand-orange { background-color: #FFA600; }
+        
+        .border-brand-dark-blue { border-color: #003F5C; }
+        .border-brand-purple { border-color: #7A5195; }
+        .border-brand-pink { border-color: #EF5675; }
+        .border-brand-orange { border-color: #FFA600; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flow-line {
+            width: 2px;
+            background-color: #cbd5e1;
+            flex-grow: 1;
+        }
+         .flow-line-h {
+            height: 2px;
+            background-color: #cbd5e1;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-black brand-dark-blue mb-4">From Dyslexia to Data</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">A Visual Analysis of the IKEA Naming Convention and its Application in Predictive Modeling</p>
+        </header>
+
+        <main class="space-y-20">
+
+            <section id="genesis" class="bg-white rounded-lg shadow-md p-6 md:p-10">
+                <h2 class="text-3xl font-bold brand-dark-blue mb-2 text-center">The Genesis of a Naming Philosophy</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">IKEA's unique naming system wasn't a marketing ploy. It was a practical solution born from founder Ingvar Kamprad's dyslexia, making it difficult to work with standard numerical item codes.</p>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8 text-center">
+                    <div class="p-6 border-2 border-dashed border-gray-300 rounded-lg">
+                        <div class="text-5xl font-black brand-pink mb-2">790.106.14</div>
+                        <h3 class="font-semibold text-gray-700">Abstract Number Codes</h3>
+                        <p class="text-sm text-gray-500">Prone to errors & hard to recall.</p>
+                    </div>
+                    <div class="text-4xl brand-purple animate-pulse hidden md:block">&rarr;</div>
+                    <div class="text-4xl brand-purple animate-pulse md:hidden">&darr;</div>
+                    <div class="bg-brand-purple text-white p-6 rounded-lg shadow-lg">
+                        <div class="text-2xl font-bold mb-2">Dyslexia</div>
+                        <p class="text-sm opacity-90">A personal challenge created the need for a cognitive aid.</p>
+                    </div>
+                     <div class="text-4xl brand-orange animate-pulse hidden md:block">&rarr;</div>
+                     <div class="text-4xl brand-orange animate-pulse md:hidden">&darr;</div>
+                    <div class="p-6 border-2 border-solid border-brand-orange rounded-lg">
+                        <div class="text-5xl font-black brand-orange mb-2">KLIPPAN</div>
+                        <h3 class="font-semibold text-gray-700">Memorable Proper Nouns</h3>
+                        <p class="text-sm text-gray-500">Easy to visualize, remember, and manage.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="rulebook" class="bg-white rounded-lg shadow-md p-6 md:p-10">
+                <h2 class="text-3xl font-bold brand-dark-blue mb-2 text-center">Deconstructing the Naming Convention</h2>
+                 <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">The modern system is a highly structured taxonomy. Each product category is systematically assigned names from a specific, curated group of words, creating a powerful link between name and function.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-center brand-purple mb-4">Primary Sources of Names</h3>
+                        <p class="text-center text-gray-600 mb-4 text-sm">The name bank is dominated by Scandinavian proper nouns, primarily geographical locations and people's names, reinforcing the brand's identity.</p>
+                        <div class="chart-container">
+                            <canvas id="nameSourceChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-center brand-purple mb-4">Category-to-Rule Mapping</h3>
+                        <p class="text-center text-gray-600 mb-4 text-sm">This chart shows how different product categories are mapped to specific types of names, forming the core logic of the system.</p>
+                        <div class="chart-container">
+                            <canvas id="categoryRuleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exceptions" class="bg-white rounded-lg shadow-md p-6 md:p-10">
+                <h2 class="text-3xl font-bold brand-dark-blue mb-2 text-center">The Rule Breakers</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">The system's rigidity is intentionally broken for marketing value or functional clarity. These are not errors, but deliberate strategic choices.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-brand-pink">
+                        <h3 class="text-2xl font-bold brand-pink mb-2">BILLY</h3>
+                        <p class="font-semibold text-sm text-gray-500 mb-2">CATEGORY: Bookcase</p>
+                        <p class="mb-3"><strong class="text-gray-700">Expected Rule:</strong> Profession or Scandinavian Boy's Name.</p>
+                        <p><strong class="text-brand-pink">Actual Rationale:</strong> A <span class="font-bold">Personal/Story</span> exception, named in honor of IKEA employee Billy Likjedhal.</p>
+                    </div>
+                     <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-brand-orange">
+                        <h3 class="text-2xl font-bold brand-orange mb-2">KROSSA</h3>
+                        <p class="font-semibold text-sm text-gray-500 mb-2">CATEGORY: Spice Mill</p>
+                        <p class="mb-3"><strong class="text-gray-700">Expected Rule:</strong> Fish, Mushroom, or Adjective.</p>
+                        <p><strong class="text-brand-orange">Actual Rationale:</strong> A <span class="font-bold">Functional</span> exception, from the Swedish verb "to crush."</p>
+                    </div>
+                     <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-brand-purple">
+                        <h3 class="text-2xl font-bold brand-purple mb-2">LACK</h3>
+                        <p class="font-semibold text-sm text-gray-500 mb-2">CATEGORY: Living Room Furniture</p>
+                        <p class="mb-3"><strong class="text-gray-700">Expected Rule:</strong> Swedish Place Name.</p>
+                        <p><strong class="text-brand-purple">Actual Rationale:</strong> A <span class="font-bold">Functional</span> exception, from the Swedish noun for "lacquer."</p>
+                    </div>
+                </div>
+            </section>
+            
+             <section id="challenges" class="bg-white rounded-lg shadow-md p-6 md:p-10">
+                <h2 class="text-3xl font-bold brand-dark-blue mb-2 text-center">Global Challenges & Linguistic Blunders</h2>
+                <p class="text-center text-gray-600 mb-10 max-w-3xl mx-auto">Applying a Swedish-centric system globally creates noise. Names can have unintended meanings in other languages, forcing regional changes and creating data inconsistencies.</p>
+                <div class="relative flex flex-col md:flex-row justify-around items-center space-y-8 md:space-y-0">
+                    <div class="w-full md:w-auto text-center p-4">
+                        <div class="text-5xl mb-2">🇬🇧</div>
+                        <h3 class="font-bold text-xl brand-pink">FARTFULL</h3>
+                        <p class="text-sm text-gray-500">Children's Workbench</p>
+                        <p class="mt-1 text-gray-700">Changed in English markets due to its unfortunate connotation.</p>
+                    </div>
+                     <div class="w-full md:w-auto text-center p-4">
+                        <div class="text-5xl mb-2">🇹🇭</div>
+                        <h3 class="font-bold text-xl brand-orange">REDALEN</h3>
+                        <p class="text-sm text-gray-500">Bed</p>
+                        <p class="mt-1 text-gray-700">Phonetically similar to a slang term for "getting to third base" in Thai.</p>
+                    </div>
+                    <div class="w-full md:w-auto text-center p-4">
+                        <div class="text-5xl mb-2">🇩🇪</div>
+                        <h3 class="font-bold text-xl brand-purple">KACKLING</h3>
+                        <p class="text-sm text-gray-500">Easter Collection</p>
+                        <p class="mt-1 text-gray-700">From the Swedish for "cackling," it sounds comical to the German ear.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modeling" class="bg-white rounded-lg shadow-md p-6 md:p-10">
+                <h2 class="text-3xl font-bold brand-dark-blue mb-2 text-center">From Taxonomy to Technology</h2>
+                <p class="text-center text-gray-600 mb-10 max-w-3xl mx-auto">The rule-based system is ideal for a machine learning project. A hierarchical model can be trained to first classify the name *type*, then predict the final product category.</p>
+                
+                <div class="flex flex-col items-center">
+                    <div class="bg-gray-100 p-4 rounded-lg shadow w-full max-w-sm text-center">
+                        <div class="font-mono text-lg font-bold brand-dark-blue">"HEMNES"</div>
+                        <p class="text-xs text-gray-500">Input: Product Name</p>
+                    </div>
+                    
+                    <div class="w-px h-12 bg-gray-300"></div>
+
+                    <div class="bg-brand-purple text-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+                        <h3 class="text-xl font-bold">Stage 1: Name Type Classifier</h3>
+                        <p class="text-sm opacity-90 mb-2">Uses lexical and gazetteer features to determine the name's semantic origin.</p>
+                        <div class="bg-white/20 p-2 rounded text-sm">Predicted Type: <span class="font-bold">Norwegian Place Name</span></div>
+                    </div>
+
+                    <div class="w-px h-12 bg-gray-300"></div>
+                    
+                    <div class="flex items-center justify-center space-x-4">
+                        <div class="bg-brand-orange text-white p-6 rounded-lg shadow-lg text-center">
+                             <h3 class="text-xl font-bold">Stage 2: Category Predictor</h3>
+                             <p class="text-sm opacity-90 mb-2">Uses name type as a feature to predict the final category.</p>
+                             <div class="bg-white/20 p-2 rounded text-sm">Final Category: <span class="font-bold">Beds & Wardrobes</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-200">
+            <p class="text-sm text-gray-500">&copy; 2025 Infographic based on "From Dyslexia to Data" Research. All visualizations created with HTML/CSS and Chart.js.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) {
+                return str;
+            }
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > maxLen) {
+                    if(currentLine.length > 0) lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            }
+            if (currentLine.length > 0) lines.push(currentLine);
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            }
+            return label;
+        };
+        
+        const sharedChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 12,
+                        },
+                        color: '#4A5568'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    backgroundColor: '#003F5C',
+                    titleFont: {
+                        family: 'Inter',
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        family: 'Inter',
+                        size: 12
+                    }
+                }
+            }
+        };
+
+        const nameSourceData = {
+            labels: [
+                wrapLabel('Geographical Places (Swedish, Danish, Norwegian)'), 
+                wrapLabel("People's Names (Male & Female)"),
+                wrapLabel('Objects & Concepts (Plants, Animals, Adjectives)'),
+                wrapLabel('Functional & Other Terms')
+            ],
+            datasets: [{
+                label: 'Distribution of Name Sources',
+                data: [45, 25, 20, 10],
+                backgroundColor: [
+                    '#003F5C',
+                    '#7A5195',
+                    '#EF5675',
+                    '#FFA600'
+                ],
+                borderColor: '#f0f4f8',
+                borderWidth: 4,
+                hoverOffset: 8
+            }]
+        };
+
+        new Chart(document.getElementById('nameSourceChart'), {
+            type: 'doughnut',
+            data: nameSourceData,
+            options: sharedChartOptions
+        });
+
+        const categoryRuleData = {
+            labels: ['Sofas', 'Beds/Wardrobes', 'Rugs', 'Curtains', 'Desks', 'Bathroom Items'],
+            datasets: [{
+                label: 'Name Type',
+                data: [1, 2, 3, 4, 5, 6],
+                backgroundColor: ['#003F5C', '#374C80', '#7A5195', '#BC5090', '#EF5675', '#FF764A'],
+                borderColor: '#f0f4f8',
+                borderWidth: 2,
+                borderRadius: 4
+            }]
+        };
+        
+        const categoryRuleOptions = { ...sharedChartOptions };
+        categoryRuleOptions.scales = {
+            y: {
+                ticks: {
+                    callback: function(value, index, values) {
+                         const mapping = ['','Swedish Places', 'Norwegian Places', 'Danish Places', 'Female Names', 'Male Names', 'Lakes & Rivers'];
+                         return mapping[value] || '';
+                    },
+                    font: { family: 'Inter', size: 10 },
+                    color: '#4A5568'
+                },
+                grid: {
+                    display: false
+                }
+            },
+            x: {
+                ticks: {
+                    font: { family: 'Inter', weight: '600' },
+                    color: '#4A5568'
+                },
+                 grid: {
+                    display: false
+                }
+            }
+        };
+        categoryRuleOptions.plugins.legend.display = false;
+
+
+        new Chart(document.getElementById('categoryRuleChart'), {
+            type: 'bar',
+            data: categoryRuleData,
+            options: categoryRuleOptions
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Embedding: KLIPPAN to Vector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .arrow {
+            position: relative;
+            width: 80px;
+            height: 10px;
+            background-color: #3b82f6; /* blue-500 */
+            margin: 0 20px;
+        }
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: -5px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #3b82f6; /* blue-500 */
+        }
+        .vector-container {
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #e5e7eb;
+        }
+        .vector-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .vector-container::-webkit-scrollbar-track {
+            background: #e5e7eb; /* gray-200 */
+            border-radius: 10px;
+        }
+        .vector-container::-webkit-scrollbar-thumb {
+            background-color: #3b82f6; /* blue-500 */
+            border-radius: 10px;
+            border: 2px solid #e5e7eb; /* gray-200 */
+        }
+        .number-box {
+            animation: fadeIn 0.5s ease-in-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+        
+        <!-- Header -->
+        <header class="text-center mb-8 md:mb-12">
+            <!-- <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Understanding Text Embeddings</h1> -->
+            <!-- <p class="text-lg text-gray-600 mt-2">From a Word to its Vector Representation</p> -->
+        </header>
+
+        <!-- Main Diagram -->
+        <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-4">
+            
+            <!-- Step 1: Input Word -->
+            <div class="text-center">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">1. Input Word</h2>
+                <div id="inputWord" class="bg-indigo-100 text-indigo-800 rounded-lg shadow-md px-8 py-4">
+                    <span class="text-3xl font-bold tracking-widest">KLIPPAN</span>
+                </div>
+            </div>
+            
+            <!-- Arrow -->
+            <div class="transform rotate-90 md:rotate-0">
+                <div class="arrow"></div>
+            </div>
+
+            <!-- Step 2: Embedding Algorithm -->
+            <div class="text-center">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">2. Embedding Algorithm</h2>
+                <div class="bg-green-100 text-green-800 rounded-lg shadow-md px-6 py-4 max-w-xs">
+                    <p class="font-mono text-lg font-semibold">Word2Vec / KB-Lab</p>
+                    <p class="text-sm mt-1">This model has been trained on a massive dataset to understand the relationships and contexts of words (+ in different languages).</p>
+                </div>
+            </div>
+            
+             <!-- Arrow -->
+            <div class="transform rotate-90 md:rotate-0">
+                <div class="arrow"></div>
+            </div>
+
+        </div>
+
+        <!-- Step 3: Output Vector -->
+        <div class="mt-12 text-center">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">3. Output Vector Representation</h2>
+            <p class="text-gray-600 mb-4 max-w-2xl mx-auto">The algorithm outputs a dense vector (a long list of numbers) that numerically represents the input word's meaning and context. Words with similar meanings will have similar vectors.</p>
+            
+            <div id="vectorContainer" class="vector-container bg-gray-200 rounded-lg p-4 w-full overflow-x-auto whitespace-nowrap shadow-inner">
+                <div class="inline-flex items-center space-x-2">
+                    <span class="text-2xl font-bold text-gray-700">[</span>
+                    <!-- Vector numbers will be generated here -->
+                </div>
+                <span class="text-2xl font-bold text-gray-700 ml-2">]</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">... a 768-dimensional vector space.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vectorContainer = document.querySelector('#vectorContainer .inline-flex');
+            const dimensions = 15; // Simplified for display
+
+            for (let i = 0; i < dimensions; i++) {
+                const number = (Math.random() * 2 - 1).toFixed(4);
+                const numberEl = document.createElement('div');
+                numberEl.className = 'number-box bg-blue-100 text-blue-800 rounded px-2 py-1 text-sm font-mono shadow-sm';
+                numberEl.textContent = number;
+                numberEl.style.animationDelay = `${i * 50}ms`;
+                vectorContainer.appendChild(numberEl);
+
+                if (i < dimensions - 1) {
+                    const comma = document.createElement('span');
+                    comma.className = 'text-gray-500';
+                    comma.textContent = ',';
+                    vectorContainer.appendChild(comma);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
