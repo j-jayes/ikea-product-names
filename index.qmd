@@ -8,6 +8,8 @@ title-slide-attributes:
   data-background-position: "bottom 10"
   data-background-size: "40%"
   data-background-opacity: "0.4"
+Rendering:
+  embed-resources: true
 ---
 
 ## What is in a name?
