@@ -18,7 +18,7 @@ title-slide-attributes:
 
 ![](assets/1.png)
 
-## Categories {.smaller}
+## Product Categories {.smaller}
 
 ```{r}
 library(tidyverse)
@@ -137,7 +137,7 @@ ikea_naming_conventions %>%
 ```
 
 
-## Categories {.smaller}
+## Product Categories {.smaller}
 
 ```{r}
 # View the tibble
@@ -204,6 +204,8 @@ Variables:
 ![](assets/pipeline.png)
 
 ## Baseline Results {.smaller}
+
+Wardrobes and outdoor furniture are the easiest to predict, while bar furniture and café furniture are the hardest, due to small sample sizes.
 
 ```{r}
 library(tibble)
@@ -444,7 +446,7 @@ improved_table <- improved_report %>%
 
 ![](assets/feature_importance.png)
 
-## Takeaways {.smaller}
+# Takeaways{visibility="uncounted" #takeaways background-color="#1b9e77"}
 
 - The naming conventions of IKEA products can provide useful signals for predicting product categories. (54% vs 60% F1-score)
 - Text embeddings, particularly when combined with dimensionality reduction techniques like UMAP, can enhance classification performance.
