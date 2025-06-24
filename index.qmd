@@ -1,10 +1,450 @@
 ---
-title: "My Awesome Slides"
-author: "Your Name"
-format: revealjs
+title: "Text-embeddings to help predict IKEA product types"
+format: 
+  revealjs:
+    embed-resources: true
+author: "Jonathan Jayes"
+date: 2025-06-24
+title-slide-attributes:
+  data-background-image: "assets/preview.png"
+  data-background-position: "bottom 10"
+  data-background-size: "40%"
+  data-background-opacity: "0.4"
 ---
 
-## Welcome to My Awesome Slides
+## What is in a name?
+
+<br>
+
+![](assets/1.png)
+
+## Categories {.smaller}
+
+```{r}
+library(tidyverse)
+library(gt)
 
 
-Testing
+ikea_naming_conventions <- tibble(
+    product_category = c(
+        "Furniture (Large Seating)",
+        "Storage & Organization",
+        "Storage & Organization",
+        "Storage & Organization",
+        "Dining",
+        "Specialized Areas",
+        "Specialized Areas",
+        "Specialized Areas",
+        "Textiles & Decor",
+        "Textiles & Decor",
+        "Textiles & Decor",
+        "Office",
+        "Lighting",
+        "Kitchen",
+        "Kitchen",
+        "Kitchen"
+    ),
+    subcategory = c(
+        "Upholstered furniture, Sofas, Armchairs, Coffee tables",
+        "Bookcases / Bookshelf series",
+        "Beds, Wardrobes, Hall furniture",
+        "Boxes, Wall decorations, Pictures, Frames, Clocks",
+        "Dining tables and chairs",
+        "Bathroom articles & storage",
+        "Outdoor/Garden furniture",
+        "Children's articles",
+        "Fabrics and Curtains",
+        "Bed textiles/linen, covers, pillows",
+        "Carpets / Rugs",
+        "Desks, Office chairs",
+        "Lighting products",
+        "Kitchen accessories/utensils",
+        "Kitchens (cabinet systems)",
+        "Bowls, vases, candles, candle holders"
+    ),
+    naming_rule = c(
+        "Swedish place names (toponyms)",
+        "Professions, Scandinavian boy's names",
+        "Norwegian place names",
+        "Swedish slang/colloquial expressions, Swedish place names",
+        "Finnish & Swedish place names",
+        "Scandinavian/Swedish lakes, rivers, and bays",
+        "Scandinavian/Swedish islands",
+        "Mammals, birds, adjectives, animals (Swedish names)",
+        "Scandinavian girl's names",
+        "Flowers, plants, precious stones",
+        "Danish place names",
+        "Scandinavian boy's names",
+        "Units of measurement, seasons, months, days, shipping/nautical terms, music/chemistry terms, Swedish place names",
+        "Fish, mushrooms, adjectives, spices, herbs, fruits, berries, foreign words, functional descriptions",
+        "Grammatical terms, functional descriptions",
+        "Swedish place names, adjectives, spices, herbs, fruits, berries"
+    ),
+    language_origin = c(
+        "Swedish",
+        "Swedish, Scandinavian",
+        "Norwegian",
+        "Swedish",
+        "Finnish, Swedish",
+        "Scandinavian",
+        "Scandinavian",
+        "Swedish",
+        "Scandinavian",
+        "Swedish",
+        "Danish",
+        "Scandinavian",
+        "Swedish",
+        "Swedish, Various",
+        "Swedish",
+        "Swedish"
+    ),
+    examples = c(
+        "KLIPPAN, EKTORP, SÖDERHAMN, POÄNG, KIVIK",
+        "BILLY, EXPEDIT, KALLAX, ALEX, HEMNES",
+        "HEMNES, MALM, MANDAL, DOMBÅS, GLADSTAD",
+        "FLÄRDFULL, RIBBA, FISKBO, VÄXBO, BJÖRKSTA",
+        "BJURSTA, KAUSTBY, INGATORP, DOCKSTA",
+        "BOLMEN, TOFTAN, VOXNAN, LIMMIAREN, HIMLEÅN",
+        "ÄPPLARÖ, SOLLERON, MASTHOLMEN, ASKHOLMEN",
+        "DUKTIG, KRITTER, SNIGLAR, RÄVUNGE, BLÅHAJ",
+        "AINA, HEDDA, SIGRID, MERETE, GUNRID",
+        "ULLVIDE, SMÖRBALL, NATTJASMIN, STENKLÖVER",
+        "ÅDUM, VEMB, SINDAL, KATTRUP, KOLDBY",
+        "MARKUS, HELMER, MIKE, TORBJÖRN, JÄRVFJÄLLET",
+        "ÅRSTID, HEKTAR, NYMÅNE, MELODI, HÖLJES",
+        "KONCIS, SKARPT, KROSSA, STANDARDMÅTT",
+        "RATIONELL, SEKTION",
+        "SOCKER, BRUNBÄR, BESTIGA"
+    )
+)
+
+# View the tibble
+ikea_naming_conventions %>%
+    select(-product_category, -language_origin) %>%
+    # group_by(subcategory) %>%
+    gt() %>% 
+    cols_label(
+        subcategory = "Product Category",
+        naming_rule = "Naming Rule",
+        # language_origin = "Language Origin",
+        examples = "Examples"
+    ) %>%
+    tab_header(
+        title = "IKEA Product Naming Conventions",
+        # subtitle = "A breakdown of IKEA's unique product naming system"
+    )
+
+```
+
+
+## Categories {.smaller}
+
+```{r}
+# View the tibble
+ikea_naming_conventions %>%
+    select(-product_category, -language_origin) %>%
+    # group_by(subcategory) %>%
+    gt() %>%
+    cols_label(
+        subcategory = "Product Category",
+        naming_rule = "Naming Rule",
+        # language_origin = "Language Origin",
+        examples = "Examples"
+    ) %>%
+    tab_header(
+        title = "IKEA Product Naming Conventions",
+        # subtitle = "A breakdown of IKEA's unique product naming system"
+    ) %>%
+    tab_style(
+        style = list(
+            cell_fill(color = "#1b9e77"),
+            cell_text(weight = "bold")
+        ),
+        locations = cells_body(
+            columns = everything(),
+            rows = c(6, 7, 9)
+        )
+    )
+
+
+```
+
+# Research Question{visibility="uncounted" #rq background-color="#1b9e77"}
+
+Can we use the naming conventions of IKEA products to predict the category of a product?
+
+## Step 1: Scrape the data {.smaller}
+
+Build a web scraper to collect product names, descriptions, and categories from the IKEA website.
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](assets/scrape.png)
+:::
+
+::: {.column width="60%"}
+
+Variables:
+
+- `product_name`: The name of the product.
+- `product_category`: The outcome variable.
+- `short_description`: A brief description of the product.
+- `price`: The price of the product.
+- `dimensions`: The dimensions of the product (length, width, height).
+- `other_colours`: A binary variable indicating if the product is available in other colours.
+
+:::
+
+::::
+
+
+## Step 2: Baseline Model {.smaller}
+
+![](assets/pipeline.png)
+
+## Baseline Results {.smaller}
+
+```{r}
+library(tibble)
+library(gt)
+library(dplyr)
+
+# First recreate the classification data
+classification_report <- tibble(
+  category = c(
+    "Bar furniture",
+    "Beds",
+    "Bookcases & shelving units",
+    "Cabinets & cupboards",
+    "Café furniture",
+    "Chairs",
+    "Chests of drawers & drawer units",
+    "Children's furniture",
+    "Nursery furniture",
+    "Outdoor furniture",
+    "Room dividers",
+    "Sideboards, buffets & console tables",
+    "Sofas & armchairs",
+    "TV & media furniture",
+    "Tables & desks",
+    "Trolleys",
+    "Wardrobes"
+  ),
+  precision = c(0.07, 0.60, 0.58, 0.32, 0.00, 0.49, 0.58, 0.08, 0.11, 0.89, 0.00, 0.00, 0.80, 0.23, 0.62, 1.00, 0.89),
+  recall = c(0.11, 0.60, 0.69, 0.36, 0.00, 0.46, 0.28, 0.08, 0.11, 0.79, 0.00, 0.00, 0.83, 0.24, 0.59, 0.17, 0.85),
+  f1_score = c(0.09, 0.60, 0.63, 0.34, 0.00, 0.47, 0.38, 0.08, 0.11, 0.84, 0.00, 0.00, 0.81, 0.23, 0.60, 0.29, 0.87),
+  support = c(9, 42, 110, 58, 5, 96, 25, 25, 19, 43, 3, 5, 86, 38, 122, 6, 47)
+)
+
+# Calculate weighted averages for the bottom row
+total_support <- sum(classification_report$support)
+weighted_precision <- sum(classification_report$precision * classification_report$support) / total_support
+weighted_recall <- sum(classification_report$recall * classification_report$support) / total_support
+weighted_f1 <- sum(classification_report$f1_score * classification_report$support) / total_support
+
+# Add a weighted average row
+classification_report <- bind_rows(
+  classification_report,
+  tibble(
+    category = "Weighted Average",
+    precision = weighted_precision,
+    recall = weighted_recall,
+    f1_score = weighted_f1,
+    support = total_support
+  )
+)
+
+# Create a heat map color function (red to green)
+color_scale <- function(x) {
+  scales::col_numeric(
+    palette = c("#F8696B", "#FFEB84", "#63BE7B"),
+    domain = c(0, 1)
+  )(x)
+}
+
+# Create the gt table with colored cells
+classification_table <- classification_report %>%
+  gt() %>%
+  tab_header(
+    title = "IKEA Furniture Classification Performance",
+    subtitle = "Precision, Recall, F1-Score by Furniture Category"
+  ) %>%
+  fmt_number(
+    columns = c(precision, recall, f1_score),
+    decimals = 2
+  ) %>%
+  data_color(
+    columns = precision,
+    colors = color_scale
+  ) %>%
+  data_color(
+    columns = recall,
+    colors = color_scale
+  ) %>%
+  data_color(
+    columns = f1_score,
+    colors = color_scale
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "aliceblue"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(
+      rows = category == "Weighted Average"
+    )
+  ) %>%
+  cols_label(
+    category = "Category",
+    precision = "Precision",
+    recall = "Recall",
+    f1_score = "F1-Score",
+    support = "Support"
+  ) %>%
+  opt_row_striping() %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = cells_column_labels()
+  )
+
+# Display the table
+# classification_table %>% 
+# gt_save("assets/classification_report.png")
+
+```
+
+![](assets/classification_report.png)
+
+## Text Embeddings? {.smaller}
+
+![](assets/2.png)
+
+## Text Embeddings {.smaller}
+
+![](assets/embedding.png)
+
+## Dimensionality Reduction {.smaller}
+
+![](assets/dimensionality_reduction.png)
+
+## Text Embeddings for Product Names {.smaller}
+
+![](assets/3.png)
+
+# Wow!{visibility="uncounted" #wow background-color="#1b9e77"}
+
+We get some signal from the product names. Does this help us predict the category?
+
+## Step 3: Prediction using Text Embeddings with UMAP {.smaller}
+
+```{r}
+# Create classification report as a tibble
+improved_report <- tibble(
+    category = c(
+        "Bar furniture",
+        "Beds",
+        "Bookcases & shelving units",
+        "Cabinets & cupboards",
+        "Café furniture",
+        "Chairs",
+        "Chests of drawers & drawer units",
+        "Children's furniture",
+        "Nursery furniture",
+        "Outdoor furniture",
+        "Room dividers",
+        "Sideboards, buffets & console tables",
+        "Sofas & armchairs",
+        "TV & media furniture",
+        "Tables & desks",
+        "Trolleys",
+        "Wardrobes"
+    ),
+    precision = c(0.17, 0.65, 0.58, 0.36, 0.00, 0.55, 0.77, 0.24, 0.28, 0.87, 0.00, 0.00, 0.81, 0.31, 0.65, 1.00, 0.91),
+    recall = c(0.22, 0.62, 0.70, 0.36, 0.00, 0.52, 0.68, 0.24, 0.26, 0.79, 0.00, 0.00, 0.81, 0.29, 0.65, 0.50, 0.91),
+    f1_score = c(0.19, 0.63, 0.63, 0.36, 0.00, 0.53, 0.72, 0.24, 0.27, 0.83, 0.00, 0.00, 0.81, 0.30, 0.65, 0.67, 0.91),
+    support = c(9, 42, 110, 58, 5, 96, 25, 25, 19, 43, 3, 5, 86, 38, 122, 6, 47)
+)
+
+# Calculate weighted averages for the bottom row
+total_support <- sum(improved_report$support)
+weighted_precision <- sum(improved_report$precision * improved_report$support) / total_support
+weighted_recall <- sum(improved_report$recall * improved_report$support) / total_support
+weighted_f1 <- sum(improved_report$f1_score * improved_report$support) / total_support
+
+# Add a weighted average row
+improved_report <- bind_rows(
+    improved_report,
+    tibble(
+        category = "Weighted Average",
+        precision = weighted_precision,
+        recall = weighted_recall,
+        f1_score = weighted_f1,
+        support = total_support
+    )
+)
+
+# Display with gt table formatting similar to the previous example
+improved_table <- improved_report %>%
+    gt() %>%
+    tab_header(
+        title = "Improved Classification with Text Embeddings",
+        subtitle = "Precision, Recall, F1-Score by Furniture Category"
+    ) %>%
+    fmt_number(
+        columns = c(precision, recall, f1_score),
+        decimals = 2
+    ) %>%
+    data_color(
+        columns = precision,
+        colors = color_scale
+    ) %>%
+    data_color(
+        columns = recall,
+        colors = color_scale
+    ) %>%
+    data_color(
+        columns = f1_score,
+        colors = color_scale
+    ) %>%
+    tab_style(
+        style = list(
+            cell_fill(color = "aliceblue"),
+            cell_text(weight = "bold")
+        ),
+        locations = cells_body(
+            rows = category == "Weighted Average"
+        )
+    ) %>%
+    cols_label(
+        category = "Category",
+        precision = "Precision",
+        recall = "Recall",
+        f1_score = "F1-Score",
+        support = "Support"
+    ) %>%
+    opt_row_striping() %>%
+    tab_style(
+        style = list(
+            cell_text(weight = "bold")
+        ),
+        locations = cells_column_labels()
+    )
+
+# Display the table
+# improved_table %>%
+    # gtsave("assets/improved_classification_report.png")
+```
+
+![](assets/improved_classification_report.png)
+
+## Step 4: Are the UMAP Features Meaningful? {.smaller}
+
+![](assets/feature_importance.png)
+
+## Takeaways {.smaller}
+
+- The naming conventions of IKEA products can provide useful signals for predicting product categories. (54% vs 60% F1-score)
+- Text embeddings, particularly when combined with dimensionality reduction techniques like UMAP, can enhance classification performance.
