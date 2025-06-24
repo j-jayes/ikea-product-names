@@ -2,7 +2,7 @@
 title: "Text-embeddings to help predict IKEA product types"
 format: revealjs
 author: "Jonathan Jayes"
-# date: 16-06-2025
+date: 2025-06-24
 title-slide-attributes:
   data-background-image: "assets/preview.png"
   data-background-position: "bottom 10"
